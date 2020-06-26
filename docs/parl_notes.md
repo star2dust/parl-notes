@@ -18,20 +18,24 @@
 ### 初识强化学习
 
 强化学习（Reinforcement learning，简称RL）是机器学习中的一个领域，强调如何基于环境而行动，以取得最大化的预期利益。核心思想是：智能体（agent）在环境（environment）中学习，根据环境的状态（state）或观测（observation），执行动作（action），并根据环境的反馈 （reward）来指导更好的动作。
-<img src="https://img-blog.csdnimg.cn/202006261112338.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="强化学习核心思想" style="zoom: 67%;" />
+
+<img src="figures/rl_basic.png" alt="强化学习核心思想" width="450"/>
 
 作为机器学习三巨头之一，强化学习和监督学习以及非监督学习关系如下图。
-<img src="https://img-blog.csdnimg.cn/20200626111308294.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="机器学习三巨头" style="zoom: 50%;" />
+
+<img src="figures/ml_big3.png" alt="机器学习三巨头" width="350"/>
 
 **监督学习关注的是认知，而强化学习关注的是决策**。简单的说，前者学习经验，后者运用经验。同样都是一张小熊的图片，监督学习输出的是灰熊、熊猫还是老虎，强化学习输出的是装死、逃跑还是干一架。
-<img src="https://img-blog.csdnimg.cn/20200626111434590.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="熊来了怎么办？强化学习告诉你" style="zoom:67%;" />
+
+<img src="figures/bear_how_to_do.png" alt="熊来了怎么办？强化学习告诉你" width="450"/>
 
 ### 强化学习的分类和方法
-<img src="https://img-blog.csdnimg.cn/20200626111527472.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="强化学习的分类" style="zoom:67%;" />
+
+<img src="figures/rl_categories.png" alt="强化学习的分类" width="450"/>
 
 强化学习主要关注的是无模型的问题，在未知的环境中进行探索学习，在生活中有广泛的应用。
 
-<img src="https://img-blog.csdnimg.cn/20200626111749834.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="强化学习应用" style="zoom:67%;" />
+<img src="figures/rl_applications.png" alt="强化学习应用" width="450" />
 
 其探索方案有二：
 
@@ -39,7 +43,8 @@
   给每个状态都赋予一个价值的概念,来代表这个状态是好还是坏,这是一个相对的概念,让智能体往价值最高的方向行进。基于价值是确定性的。
 - 基于策略的方法（Policy）
   制定出多个策略,策略里的每个动作都有一定的概率,并让每一条策略走到底,最后查看哪个策略是最优的。基于策略是随机性的。
-<img src="https://img-blog.csdnimg.cn/20200626111616956.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="强化学习方法" style="zoom:67%;" />
+
+<img src="figures/rl_methods.png" alt="强化学习方法" width="450"/>
 
 ### PRAL框架和GYM环境
 
@@ -48,7 +53,7 @@
 
 Agent的训练（Train）和测试（Test）过程直接上图展示如下。
 
-<img src="https://img-blog.csdnimg.cn/20200626111903269.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="gym中agent训练和测试过程" style="zoom:50%;" />
+<img src="figures/gym.png" alt="gym中agent训练和测试过程" width="450"/>
 
 本文所需全部依赖库代码如下，paddlepaddle默认使用CPU版本，可自行选用GPU版本，这里不再赘述。
 
@@ -70,10 +75,12 @@ pip install rlschool==0.3.1
 某一状态信息包含了所有相关的历史，只要当前状态可知，所有的历史信息都不再需要，当前状态就可以决定未来，则认为该状态具有**马尔科夫性**。**马尔可夫决策过程**（MDP）是序列决策的数学模型，它是一个无记忆的随机过程，可以用一个元组<S,P>表示，其中S是有限数量的状态集，P是状态转移概率矩阵。
 
 强化学习中我们引入奖励R和动作A来描述环境，构成MDP五元组<S,A,P,R,$\gamma$>，其中P函数表示环境的随机性，R函数其实是P函数的一部分，表示获得的收益，$\gamma$是衰减因子以适当的减少对未来收益的考虑。
-<img src="https://img-blog.csdnimg.cn/20200626111958280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="熊问题树形图" style="zoom:67%;" />
+
+<img src="figures/bear_tree.png" alt="熊问题树形图" width="450"/>
 
 同样以熊问题为例，对应的是Model-free的情况，即P函数和R函数都未知的情况。这时我们用价值V代表某一状态的好坏，用Q函数来代表某个状态下哪个动作更好，即状态动作价值。
-<img src="https://img-blog.csdnimg.cn/20200626112146791.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="熊问题model-free" style="zoom:67%;" />
+
+<img src="figures/model_free.png" alt="熊问题model-free" width="450"/>
 
 现实世界中，奖励R往往是延迟的，所以一般会从当前时间点开始，对后续可能得到的收益累加，以此来计算当前的价值。但是有时候目光不要放得太长远，**对远一些的东西当作近视看不见就好**。适当地引入一个衰减因子$\gamma$，再去计算未来的总收益，$\gamma$的值在0-1之间，时间点越久远，对当前的影响也就越小。
 
@@ -82,12 +89,14 @@ pip install rlschool==0.3.1
 假设人走在树林里，先看到树上有熊爪后看到熊，接着就看到熊发怒了，经过很多次之后，原来要见到熊才瑟瑟发抖的，后来只要见到树上有熊爪就会有晕眩和害怕的感觉。也就是说，在不断地训练之后，下一个状态的价值可以不断地强化、影响上一个状态的价值。
 
 这样的迭代状态价值的强化方式被称为时序差分（Temporal Difference）。单步求解Q函数，用$Q(S_{t+1},A_{t+1})$来近似$G_{t+1}$，以迭代的方式简化数学公式，最终使得$Q(S_t,A_t)$逼近目标值$G_t$。这里的目标值Target就是前面提到的未来收益的累加。
-<img src="https://img-blog.csdnimg.cn/20200626112827709.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="Q表格TD单步更新" style="zoom: 67%;" />
+
+<img src="figures/q_td.png" alt="Q表格TD单步更新" width="400"/>
 
 ### Sarsa和Qlearning
 
 **Sarsa**全称是state-action-reward-state’-action’，目的是学习特定的state下，特定action的价值Q，最终建立和优化一个Q表格，以state为行，action为列，根据与环境交互得到的reward来更新Q表格，更新公式即为上面的迭代公式。Sarsa在训练中为了更好的探索环境，采用ε-greedy方式（如下图）来训练，有一定概率随机选择动作输出。
-<img src="https://img-blog.csdnimg.cn/20200626112858455.png" alt="epsilon-greedy" style="zoom:50%;" />
+
+<img src="figures/e_greedy.png" alt="e_greedy" width="350"/>
 
 **Q-learning**也是采用Q表格的方式存储Q值，探索部分与Sarsa是一样的，采用ε-greedy方式增加探索。
 
@@ -95,13 +104,16 @@ pip install rlschool==0.3.1
 - Sarsa是on-policy，先做出动作再learn，Q-learning是off-policy，learn时无需获取下一步动作
 
 二者更新Q表格的方式分别为：
-<img src="https://img-blog.csdnimg.cn/20200626112933855.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="sarsa和qlearning更新Q表格方式对比" style="zoom: 67%;" />
+
+<img src="figures/qlearning_sarsa_learn.png" alt="sarsa和qlearning更新Q表格方式对比" width="400"/>
 
 二者算法对比如下图所示，有三处不同点。
-<img src="https://img-blog.csdnimg.cn/20200626113042431.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="sarsa和qlearning算法对比" style="zoom: 50%;" />
+
+<img src="figures/qlearning_sarsa.png" alt="sarsa和qlearning算法对比" width="500"/>
 
 on-policy优化的是目标策略，用下一步一定会执行的动作来优化Q表格；off-policy实际上有两种不同的策略，期望得到的目标策略和大胆探索的行为策略，在目标策略的基础上用行为策略获得更多的经验。
-<img src="https://img-blog.csdnimg.cn/20200626113115987.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMzg3OTA=,size_16,color_FFFFFF,t_70" alt="离线在线之争" style="zoom:50%;" />
+
+<img src="figures/on_off_policy.png" alt="离线在线之争" width="450"/>
 
 ### 代码构建与演示
 
@@ -220,7 +232,9 @@ python .\train.py
 最终结果如下面的GIF所示。可以看出来Sarsa比较保守，会选择下限最高的路线，即尽可能远离悬崖的路线，虽然路程远了，但至少掉下悬崖的风险就小了很多；而QLearning比较激进，会选择上限最高的路线，即路程最近的路线，但存在些微扰动便可能掉下悬崖。
 
 Sarsa训练图：
-<img src="https://img-blog.csdnimg.cn/20200626121657752.gif" alt="Sarsa训练图" style="zoom:67%;" />
+
+<img src="figures/sarsa.gif" alt="Sarsa训练图" width="450"/>
 
 QLearning训练图：
-<img src="https://img-blog.csdnimg.cn/20200626121719779.gif" alt="QLearning训练图" style="zoom:67%;" />
+
+<img src="figures/q_learning.gif" alt="QLearning训练图" width="450" />
