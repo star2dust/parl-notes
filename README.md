@@ -1,6 +1,6 @@
 # A Tutorial to Learn RL from Examples
 
-## Install requirements
+## Install Requirements
 
 ```shell
 # or try: pip install -r requirements.txt
@@ -13,7 +13,7 @@ pip install rlschool==0.3.1
 
 ## PARL Basics
 
-PARL is a flexible and high-efficient reinforcement learning framework. PARL aims to build an agent for training algorithms to perform complex tasks. The main abstractions introduced by PARL that are used to build an agent recursively are the following:
+[PARL](https://github.com/PaddlePaddle/PARL) is a flexible and high-efficient reinforcement learning framework. PARL aims to build an agent for training algorithms to perform complex tasks. The main abstractions introduced by PARL that are used to build an agent recursively are the following:
 
 - **Model** is abstracted to construct the forward network which defines a policy network or critic network given state as input.
 
@@ -33,7 +33,8 @@ cd .\tutorials\lesson2\q_learning
 python .\train.py
 ```
 
-Results are put here.
+Results are put here. The first one is Sarsa, the other one is Q-learning.
 
-<img src="docs\figures\sarsa.gif" alt="sarsa" style="zoom:33%;" />
-<img src="docs\figures\q_learning.gif" alt="qlearning" style="zoom:33%;" />
+<img src="docs\figures\sarsa.gif" alt="sarsa" width="250" />
+
+<img src="docs\figures\q_learning.gif" alt="qlearning" width="250" />

@@ -1,4 +1,4 @@
-# PARL框架从零入门强化学习
+# 世界冠军带你从零实践强化学习心得
 
 [TOC]
 
@@ -233,8 +233,8 @@ python .\train.py
 
 Sarsa训练图：
 
-<img src="figures/sarsa.gif" alt="Sarsa训练图" width="450"/>
+<img src="figures/sarsa.gif" alt="Sarsa训练图" width="250"/>
 
 QLearning训练图：
 
-<img src="figures/q_learning.gif" alt="QLearning训练图" width="450" />
+<img src="figures/q_learning.gif" alt="QLearning训练图" width="250" />
