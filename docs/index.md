@@ -6,7 +6,7 @@
 
 > 不要重复造轮子，学会使用轮子。
 
-本文源于百度AI平台飞桨学院《[世界冠军带你从零实践强化学习](https://aistudio.baidu.com/aistudio/education/group/info/1335)》课程的自我总结。本文旨在提供给读者PARL框架的使用方法，并从模型的理解和代码的构建角度来整理五次课所学内容，不求详尽但求简洁明了。我认为强化学习中对算法每一个概念的理解很重要，你可以不懂公式的推导，但是只要你理解了算法框图中的每一个步骤，那你就能够灵活的应用PARL框架去解决自己的问题。
+本文源于百度AI平台飞桨学院《[世界冠军带你从零实践强化学习](https://aistudio.baidu.com/aistudio/education/group/info/1335)》课程的总结，感谢科科老师这几天精彩的讲解。本文旨在提供给读者PARL框架的使用方法，并从模型的理解和代码的构建角度来整理五次课所学内容，不求详尽但求简洁明了。我认为强化学习中对算法每一个概念的理解很重要，你可以不懂公式的推导，但是只要你理解了算法框图中的每一个步骤，那你就能够灵活的应用PARL框架去解决自己的问题。
 
 开始之前我假设大家都已经对强化学习有了最基本的认识，同时具有python编程基础，一定程度上掌握[paddlepaddle](https://www.paddlepaddle.org.cn/documentation/docs/zh/1.6/beginners_guide/quick_start_cn.html)和[numpy库](https://www.paddlepaddle.org.cn/tutorials/projectdetail/557543)的用法。如果完全是小白，理论部分可以看看大神的笔记，推荐[Mr.郑先生_](https://blog.csdn.net/zbp_12138/article/details/106800911)、[Tiny Tony](https://www.zhihu.com/people/tiny-tony-5/posts)、[hhhsy](https://www.zhihu.com/people/hhhsy-9/posts)、[叶强](https://www.zhihu.com/people/qqiang00/posts)大佬们的总结。
 
@@ -105,3 +105,124 @@ pip install rlschool==0.3.1
 二者算法对比如下图所示，有三处不同点。
 
 <img src="figures/qlearning_sarsa.png" alt="qlearning_sarsa" width="500"/>
+
+on-policy优化的是目标策略，用下一步一定会执行的动作来优化Q表格；off-policy实际上有两种不同的策略，期望得到的目标策略和大胆探索的行为策略，在目标策略的基础上用行为策略获得更多的经验。
+
+<img src="figures/on_off_policy.png" alt="on_off_policy" width="450"/>
+
+### 代码构建与演示
+
+Sarsa Agent构建
+
+```python
+class SarsaAgent(object):
+    def __init__(self,
+                 obs_n,
+                 act_n,
+                 learning_rate=0.01,
+                 gamma=0.9,
+                 e_greed=0.1):
+        self.act_n = act_n  # 动作维度，有几个动作可选
+        self.lr = learning_rate  # 学习率
+        self.gamma = gamma  # reward的衰减率
+        self.epsilon = e_greed  # 按一定概率随机选动作
+        self.Q = np.zeros((obs_n, act_n))
+
+    # 根据输入观察值，采样输出的动作值，带探索
+    def sample(self, obs):
+        if np.random.uniform(0, 1) < (1.0 - self.epsilon):  #根据table的Q值选动作
+            action = self.predict(obs)
+        else:
+            action = np.random.choice(self.act_n)  #有一定概率随机探索选取一个动作
+        return action
+
+    # 根据输入观察值，预测输出的动作值
+    def predict(self, obs):
+        Q_list = self.Q[obs, :]
+        maxQ = np.max(Q_list)
+        action_list = np.where(Q_list == maxQ)[0]  # maxQ可能对应多个action
+        action = np.random.choice(action_list)
+        return action
+
+    # 学习方法，也就是更新Q-table的方法
+    def learn(self, obs, action, reward, next_obs, next_action, done):
+        """ on-policy
+            obs: 交互前的obs, s_t
+            action: 本次交互选择的action, a_t
+            reward: 本次动作获得的奖励r
+            next_obs: 本次交互后的obs, s_t+1
+            next_action: 根据当前Q表格, 针对next_obs会选择的动作, a_t+1
+            done: episode是否结束
+        """
+        predict_Q = self.Q[obs, action]
+        if done:
+            target_Q = reward  # 没有下一个状态了
+        else:
+            target_Q = reward + self.gamma * self.Q[next_obs,
+                                                    next_action]  # Sarsa
+        self.Q[obs, action] += self.lr * (target_Q - predict_Q)  # 修正q
+```
+
+Qlearning Agent构建
+
+```python
+class QLearningAgent(object):
+    def __init__(self,
+                 obs_n,
+                 act_n,
+                 learning_rate=0.01,
+                 gamma=0.9,
+                 e_greed=0.1):
+        self.act_n = act_n  # 动作维度，有几个动作可选
+        self.lr = learning_rate  # 学习率
+        self.gamma = gamma  # reward的衰减率
+        self.epsilon = e_greed  # 按一定概率随机选动作
+        self.Q = np.zeros((obs_n, act_n))
+
+    # 根据输入观察值，采样输出的动作值，带探索
+    def sample(self, obs):
+        if np.random.uniform(0, 1) < (1.0 - self.epsilon):  #根据table的Q值选动作
+            action = self.predict(obs)
+        else:
+            action = np.random.choice(self.act_n)  #有一定概率随机探索选取一个动作
+        return action
+
+    # 根据输入观察值，预测输出的动作值
+    def predict(self, obs):
+        Q_list = self.Q[obs, :]
+        maxQ = np.max(Q_list)
+        action_list = np.where(Q_list == maxQ)[0]  # maxQ可能对应多个action
+        action = np.random.choice(action_list)
+        return action
+
+    # 学习方法，也就是更新Q-table的方法
+    def learn(self, obs, action, reward, next_obs, done):
+        """ off-policy
+            obs: 交互前的obs, s_t
+            action: 本次交互选择的action, a_t
+            reward: 本次动作获得的奖励r
+            next_obs: 本次交互后的obs, s_t+1
+            done: episode是否结束
+        """
+        predict_Q = self.Q[obs, action]
+        if done:
+            target_Q = reward  # 没有下一个状态了
+        else:
+            target_Q = reward + self.gamma * np.max(
+                self.Q[next_obs, :])  # Q-learning
+        self.Q[obs, action] += self.lr * (target_Q - predict_Q)  # 修正q
+```
+
+大家可以用命令行运行以下代码尝试一下。
+
+```shell
+# sarsa 演示
+cd .\tutorials\lesson2\sarsa
+python .\train.py
+# qlearing 演示
+cd .\tutorials\lesson2\q_learning
+python .\train.py
+```
+
+
+
