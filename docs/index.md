@@ -712,7 +712,7 @@ if __name__ == '__main__':
 # DQN 演示
 cd .\tutorials\lesson3\dqn
 python .\train.py
-cd .\tutorials\homework\lesson3\dqn
+cd .\tutorials\homework\lesson3\dqn_mountaincar
 python .\train.py
 ```
 

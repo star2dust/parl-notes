@@ -47,7 +47,7 @@ To demonstrate DQN in CartPole and MountainCar environment.
 # dqn
 cd .\tutorials\lesson3\dqn
 python .\train.py
-cd .\tutorials\homework\lesson3\dqn
+cd .\tutorials\homework\lesson3\dqn_mountaincar
 python .\train.py
 ```
 
