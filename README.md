@@ -38,3 +38,21 @@ Results are put here. The first one is Sarsa, the other one is Q-learning.
 <img src="docs\figures\sarsa.gif" alt="sarsa" width="250" />
 
 <img src="docs\figures\q_learning.gif" alt="qlearning" width="250" />
+
+## DQN
+
+To demonstrate DQN in CartPole and MountainCar environment.
+
+```python
+# dqn
+cd .\tutorials\lesson3\dqn
+python .\train.py
+cd .\tutorials\homework\lesson3\dqn
+python .\train.py
+```
+
+Results are put here. The first one is CartPole , the other one is MountainCar .
+
+<img src="docs/figures/cartpole.gif" alt="cartpole训练图" width="250"/>
+
+<img src="docs/figures/mountaincar.gif" alt="mountaincar训练图" width="250"/>
